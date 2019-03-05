@@ -38,6 +38,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private Boolean mEnableTouchEvents;
 
     public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
+    public static final String BUNDLE_STATE_SCORE = "currentScore";
+    public static final String BUNDLE_STATE_QUESTION = "currentQuestion";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +48,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_game);
 
         mQuestionBank = this.generateQuestions();
-        mNumberOfQuestions = 3;
-        mActualScore = 0;
+
+        if (savedInstanceState != null) {
+            mActualScore = savedInstanceState.getInt(BUNDLE_EXTRA_SCORE);
+            mNumberOfQuestions = savedInstanceState.getInt(BUNDLE_STATE_QUESTION);
+        } else {
+            mNumberOfQuestions = 3;
+            mActualScore = 0;
+        }
 
         mEnableTouchEvents = true;
 
@@ -83,6 +91,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         return new QuestionBank(Arrays.asList(question1, question2, question3, question4, question5, question6, question7));
     }
+
 
     private void displayQuestion(final Question question) {
         mQuestionText.setText(question.getQuestion());
@@ -146,5 +155,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 .create()
                 .show();
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putInt(BUNDLE_EXTRA_SCORE, mActualScore);
+        outState.putInt(BUNDLE_STATE_QUESTION, mNumberOfQuestions);
+
+        super.onSaveInstanceState(outState);
+    }
+
+
 }
 
