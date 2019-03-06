@@ -87,7 +87,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Question question4 = new Question("Which country is the origin of the cocktail Mojito?", Arrays.asList("Cuba", "Spain", "Brazil", "Mexico"), 0);
         Question question5 = new Question("With which fruit is Kriek beer (a Belgium brew) is flavoured?", Arrays.asList("Cherry", "Strawberry", "Blackberry", "Blueberry"), 0);
         Question question6 = new Question("In what year was Google launched on the web?", Arrays.asList("1996", "1998", "2000", "2002"), 1);
-        Question question7 = new Question("What is the most spoken language in the world", Arrays.asList("French", "Spanish", "French", "Chinese"), 3);
+        Question question7 = new Question("What is the most spoken language in the world", Arrays.asList("French", "Spanish", "English", "Chinese"), 3);
 
         return new QuestionBank(Arrays.asList(question1, question2, question3, question4, question5, question6, question7));
     }

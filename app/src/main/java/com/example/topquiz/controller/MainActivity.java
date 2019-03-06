@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mGreetingText;
     private EditText mNameInput;
     private Button mPlayButton;
+    private Button mHistoricButton;
     private User mUser;
 
     private String firstname;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mGreetingText = (TextView) findViewById(R.id.activity_main_greeting_text);
         mNameInput = (EditText) findViewById(R.id.activity_main_name_input);
         mPlayButton = (Button) findViewById(R.id.activity_main_play_button);
+        mHistoricButton = (Button) findViewById(R.id.activity_main_historic_button);
 
         mUser = new User();
 
@@ -89,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
                 startActivityForResult(gameActivity, GAME_ACTIVITY_REQUEST_CODE);
+            }
+        });
+
+
+        mHistoricButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent historicActivity = new Intent(MainActivity.this, HistoricActivity.class);
+                startActivity(historicActivity);
             }
         });
 
