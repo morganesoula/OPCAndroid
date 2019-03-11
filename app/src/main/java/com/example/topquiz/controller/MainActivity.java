@@ -2,14 +2,11 @@ package com.example.topquiz.controller;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +15,11 @@ import android.widget.Toast;
 
 import com.example.topquiz.R;
 import com.example.topquiz.model.User;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,11 +30,17 @@ public class MainActivity extends AppCompatActivity {
     private User mUser;
 
     private String firstname;
+    private String nameToAdd;
 
     private int textLength;
     private int score;
 
     private static final int GAME_ACTIVITY_REQUEST_CODE = 42;
+
+    public static final String BUNDLE_TAB_SCORE = "BUNDLE_TAB_SCORE";
+    public static final String BUNDLE_TEST = "BUNDLE_TEST";
+
+    public static final HashMap<String, ArrayList<Integer>> mSimpleMapPlayerScore = new HashMap<>();
 
     SharedPreferences mPreferences;
     private static final String FIRSTNAME_SAVED = "FIRSTNAME_SAVED";
@@ -43,22 +51,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mUser = new User();
+        mPreferences = getPreferences(MODE_PRIVATE);
+
         mGreetingText = (TextView) findViewById(R.id.activity_main_greeting_text);
         mNameInput = (EditText) findViewById(R.id.activity_main_name_input);
         mPlayButton = (Button) findViewById(R.id.activity_main_play_button);
         mHistoricButton = (Button) findViewById(R.id.activity_main_historic_button);
 
-        mUser = new User();
-
-        mPreferences = getPreferences(MODE_PRIVATE);
-
-        welcomeBack();
-
         mPlayButton.setEnabled(false);
-
-        if (mNameInput.getText().length() > 0) {
-            mPlayButton.setEnabled(true);
-        }
+        mHistoricButton.setVisibility(View.INVISIBLE);
 
         mNameInput.addTextChangedListener(new TextWatcher() {
 
@@ -94,11 +96,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         mHistoricButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent historicActivity = new Intent(MainActivity.this, HistoricActivity.class);
+                historicActivity.putExtra(BUNDLE_TAB_SCORE, mSimpleMapPlayerScore);
+                historicActivity.putExtra(BUNDLE_TEST, nameToAdd);
                 startActivity(historicActivity);
             }
         });
@@ -116,20 +119,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     protected void welcomeBack() {
 
         firstname = mPreferences.getString(FIRSTNAME_SAVED, null);
 
+
         if (firstname != null) {
-            mGreetingText.setText("Welcome back " + firstname +"! \nYour last score recorded is " + score +".");
+            mGreetingText.setText("Hola " + firstname +"! \nYour last score recorded is " + score +".");
             mNameInput.setText(firstname);
             textLength = mNameInput.getText().length();
             mNameInput.setSelection(textLength, textLength);
+            mHistoricButton.setVisibility(View.VISIBLE);
+
+            getTabScores();
         } else {
             mNameInput.setText(mUser.getFirstName());
         }
 
     }
+
+    protected void getTabScores() {
+
+        nameToAdd = mUser.getFirstName();
+
+        if (!mSimpleMapPlayerScore.containsKey(nameToAdd) || mSimpleMapPlayerScore.get(nameToAdd) == null) {
+            mSimpleMapPlayerScore.put(nameToAdd, new ArrayList<Integer>(score));
+        } else {
+            mSimpleMapPlayerScore.get(nameToAdd).add(score);
+        }
+
+    }
+
 
 
 }

@@ -6,7 +6,11 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -18,6 +22,7 @@ import android.widget.Toast;
 import com.example.topquiz.R;
 import com.example.topquiz.model.Question;
 import com.example.topquiz.model.QuestionBank;
+import com.example.topquiz.model.User;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,8 +43,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private Boolean mEnableTouchEvents;
 
     public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
-    public static final String BUNDLE_STATE_SCORE = "currentScore";
     public static final String BUNDLE_STATE_QUESTION = "currentQuestion";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
