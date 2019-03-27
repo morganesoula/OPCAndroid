@@ -11,15 +11,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.topquiz.R;
 import com.example.topquiz.model.User;
 
-import java.lang.reflect.Array;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,20 +32,22 @@ public class MainActivity extends AppCompatActivity {
     private User mUser;
 
     private String firstname;
-    private String nameToAdd;
+
+    private String playerName;
+    private int playerScore;
 
     private int textLength;
     private int score;
 
     private static final int GAME_ACTIVITY_REQUEST_CODE = 42;
 
-    public static final String BUNDLE_TAB_SCORE = "BUNDLE_TAB_SCORE";
-    public static final String BUNDLE_TEST = "BUNDLE_TEST";
-
-    public static final HashMap<String, ArrayList<Integer>> mSimpleMapPlayerScore = new HashMap<>();
-
-    SharedPreferences mPreferences;
+    private SharedPreferences mPreferences;
     private static final String FIRSTNAME_SAVED = "FIRSTNAME_SAVED";
+    public static final String PLAYER_NAME_SAVED = "PLAYER_NAME_SAVED";
+    public static final String SCORE_SAVED = "SCORE_SAVED";
+    public static final String TREE_MAP_SAVED = "TREE_MAP_SAVED";
+
+    public HashMap<String, List<Integer>> savedTabScores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         mUser = new User();
         mPreferences = getPreferences(MODE_PRIVATE);
+        savedTabScores = new HashMap<>();
 
         mGreetingText = (TextView) findViewById(R.id.activity_main_greeting_text);
         mNameInput = (EditText) findViewById(R.id.activity_main_name_input);
@@ -96,17 +101,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mHistoricButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent historicActivity = new Intent(MainActivity.this, HistoricActivity.class);
-                historicActivity.putExtra(BUNDLE_TAB_SCORE, mSimpleMapPlayerScore);
-                historicActivity.putExtra(BUNDLE_TEST, nameToAdd);
-                startActivity(historicActivity);
-            }
-        });
-
-
     }
 
     @Override
@@ -114,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
         if (GAME_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == resultCode)
         {
             score = data.getIntExtra(GameActivity.BUNDLE_EXTRA_SCORE, 0);
+
+            mPreferences.edit().putString(PLAYER_NAME_SAVED, firstname).apply();
+            mPreferences.edit().putInt(SCORE_SAVED, score).apply();
 
             welcomeBack();
         }
@@ -124,32 +121,51 @@ public class MainActivity extends AppCompatActivity {
 
         firstname = mPreferences.getString(FIRSTNAME_SAVED, null);
 
-
         if (firstname != null) {
-            mGreetingText.setText("Hola " + firstname +"! \nYour last score recorded is " + score +".");
+            mGreetingText.setText("Welcome back " + firstname +"! \nYour last score recorded is " + score +". \nWill you do better this time?");
             mNameInput.setText(firstname);
             textLength = mNameInput.getText().length();
             mNameInput.setSelection(textLength, textLength);
             mHistoricButton.setVisibility(View.VISIBLE);
 
-            getTabScores();
+            getHistoric();
         } else {
             mNameInput.setText(mUser.getFirstName());
         }
 
     }
 
-    protected void getTabScores() {
 
-        nameToAdd = mUser.getFirstName();
+    protected void getHistoric() {
 
-        if (!mSimpleMapPlayerScore.containsKey(nameToAdd) || mSimpleMapPlayerScore.get(nameToAdd) == null) {
-            mSimpleMapPlayerScore.put(nameToAdd, new ArrayList<Integer>(score));
+        playerName = mPreferences.getString(PLAYER_NAME_SAVED, null);
+        playerScore = mPreferences.getInt(SCORE_SAVED, 0);
+
+        if (!savedTabScores.containsKey(playerName)) {
+            savedTabScores.put(playerName, new ArrayList<Integer>(Arrays.asList(playerScore)));
         } else {
-            mSimpleMapPlayerScore.get(nameToAdd).add(score);
+            savedTabScores.get(playerName).add(playerScore);
+        }
+
+        if (playerName != null) {
+            mHistoricButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent historicActivity = new Intent(MainActivity.this, HistoricActivity.class);
+
+                    historicActivity.putExtra(TREE_MAP_SAVED, (Serializable) savedTabScores);
+                    historicActivity.putExtra(PLAYER_NAME_SAVED, playerName);
+                    historicActivity.putExtra(SCORE_SAVED, playerScore);
+
+                    startActivity(historicActivity);
+                }
+            });
+
         }
 
     }
+
 
 
 

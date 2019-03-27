@@ -1,41 +1,27 @@
 package com.example.topquiz.controller;
 
-import android.content.Intent;
-import android.support.annotation.Nullable;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.topquiz.R;
+import com.example.topquiz.adapter.HistoricTableAdapter;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class HistoricActivity extends AppCompatActivity {
 
     private Button mBackButton;
-    private ListView mNameListView;
-    private ListView mScoreListView;
+    private ListView mListView;
 
-    private String test;
+    private HashMap<String, List<Integer>> tabScores;
 
-    private HashMap<String, ArrayList<Integer>> mapScores;
-    private ArrayList<String> mListOfNames;
+    private String player;
+    private int score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +29,15 @@ public class HistoricActivity extends AppCompatActivity {
         setContentView(R.layout.activity_historic);
 
         mBackButton = (Button) findViewById(R.id.activity_historic_back_button);
-        mNameListView = (ListView) findViewById(R.id.activity_historic_name_listview);
-        mScoreListView = (ListView) findViewById(R.id.activity_historic_score_listview);
+        mListView = (ListView) findViewById(R.id.activity_historic_table_listview);
 
-        Intent intent = getIntent();
-        mapScores = (HashMap<String, ArrayList<Integer>>) intent.getSerializableExtra(MainActivity.BUNDLE_TAB_SCORE);
+        // player = getIntent().getStringExtra(MainActivity.PLAYER_NAME_SAVED);
+        // score = getIntent().getIntExtra(MainActivity.SCORE_SAVED, 0);
 
-        Set<String> keySet = mapScores.keySet();
-        mListOfNames = new ArrayList<>(keySet);
+        tabScores = (HashMap<String, List<Integer>>) getIntent().getSerializableExtra(MainActivity.TREE_MAP_SAVED);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(HistoricActivity.this, android.R.layout.simple_list_item_1, mListOfNames);
-        mNameListView.setAdapter(adapter);
-
+        HistoricTableAdapter adapter = new HistoricTableAdapter(this, tabScores);
+        mListView.setAdapter(adapter);
 
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +46,7 @@ public class HistoricActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 }

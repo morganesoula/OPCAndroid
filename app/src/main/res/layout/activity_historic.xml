@@ -1,65 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
+    android:layout_weight="1"
     tools:context=".controller.HistoricActivity">
 
-    <TextView
-        android:id="@+id/activity_historic_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:textSize="24dp"
-        android:textAlignment="center"
-        android:text="Points table" />
 
-    <Button
-        android:id="@+id/activity_historic_score_order_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_below="@id/activity_historic_text_view"
-        android:text="Score order" />
+    <!--    <TextView
+            android:id="@+id/activity_historic_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:textSize="24dp"
+            android:textAlignment="center"
+            android:text="Points table" />
 
-    <Button
-        android:id="@+id/activity_historic_abc_order_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/activity_historic_text_view"
-        android:layout_toRightOf="@id/activity_historic_score_order_button"
-        android:text="Alphabetical order" />
+        <Button
+            android:id="@+id/activity_historic_score_order_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="Score order" />
+
+        <Button
+            android:id="@+id/activity_historic_abc_order_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alphabetical order" />-->
 
     <Button
         android:id="@+id/activity_historic_back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
         android:text="Back"/>
 
     <ListView
-        android:id="@+id/activity_historic_name_listview"
-        android:layout_below="@id/activity_historic_score_order_button"
-        android:layout_above="@id/activity_historic_back_button"
+        android:id="@+id/activity_historic_table_listview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </ListView>
 
-    <ListView
-        android:layout_toRightOf="@id/activity_historic_name_listview"
-        android:id="@+id/activity_historic_score_listview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/activity_historic_score_order_button"
-        android:layout_above="@id/activity_historic_back_button">
-    </ListView>
 
 
 
-</RelativeLayout>
+</LinearLayout>
